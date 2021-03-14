@@ -21,21 +21,22 @@ import javax.swing.JOptionPane;
  */
 public class My_Cnx {
 
-    private static final String servername = "localhost";
-    private static final String username = "root";
-    private static final String dbname = "fifa";
-    private static final Integer portnumber = 3306;
-    private static final String password = "";
+    private static final String SERVERNAME = "localhost";
+    private static final String USERNAME = "root";
+    private static final String DBNAME = "fifa";
+    private static final Integer PORTNUMBER = 3306;
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() {
         Connection cnx = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            cnx = DriverManager.getConnection("jdbc:mysql://" + servername + ":" + portnumber + "/" + dbname, "\"" + username + "\"", "\"" + password + "\"");
+            cnx = DriverManager.getConnection("jdbc:mysql://" + SERVERNAME + ":" + PORTNUMBER + "/" + DBNAME, "\"" + USERNAME + "\"", "\"" + PASSWORD + "\"");
             System.out.println("connected successfully to mysql \n");
         } catch (SQLException ex) {
             System.out.print("failed to connect to database \n");
             Logger.getLogger(My_Cnx.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(My_Cnx.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -54,7 +55,8 @@ public class My_Cnx {
         }
     }
 
-    public void insert(String table, String[] fields, Object[] values) {
+    public int insert(String table, String[] fields, Object[] values) {
+        int result = -1000;
         try {
             String[] preparedValues = new String[fields.length];
             for (int i = 0; i < fields.length; i++) {
@@ -74,10 +76,7 @@ public class My_Cnx {
                     stmt.setString(i + 1, (String) values[i]);
                 }
             }
-            int result = stmt.executeUpdate();
-            if (result == 0) {
-                throw new SQLException("failed to insert in database");
-            }
+            result = stmt.executeUpdate();
             stmt.close();
             System.out.println("inserted into database successfully \n");
 
@@ -85,6 +84,7 @@ public class My_Cnx {
             System.out.print("failed to insert in database \n");
             Logger.getLogger(My_Cnx.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result;
     }
 
     public ResultSet readAndSort(String table, String field, boolean ascending) {
@@ -164,7 +164,8 @@ public class My_Cnx {
         return result;
     }
 
-    public void update(String table, String updateField, Object updateValue, String field, Object value) {
+    public int update(String table, String updateField, Object updateValue, String field, Object value) {
+        int result = -1000;
         try {
             String query = "update " + table + " set " + updateField + "=? where " + field + "=?";
             Connection cnx = My_Cnx.getConnection();
@@ -181,7 +182,7 @@ public class My_Cnx {
             if (value instanceof String) {
                 stmt.setString(2, (String) value);
             }
-            int result = stmt.executeUpdate();
+            result = stmt.executeUpdate();
             if (result == 0) {
                 throw new SQLException("failed to update in database");
             }
@@ -192,6 +193,7 @@ public class My_Cnx {
             System.out.println("failed updated database \n");
             Logger.getLogger(My_Cnx.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result;
     }
 
     public void update(String table, String[] updateFields, Object[] updateValues, String field, Object value) {

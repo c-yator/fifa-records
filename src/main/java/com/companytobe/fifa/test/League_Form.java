@@ -312,7 +312,10 @@ public class League_Form extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
         } catch (Exception ex) {
             Logger.getLogger(League_Form.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
+            String message = ex.getMessage();
+            if (!message.isEmpty()) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
+            }
         }
 
     }//GEN-LAST:event_jButton_displayleagueActionPerformed

@@ -9,10 +9,21 @@ package com.companytobe.fifa.test;
  *
  * @author Yator
  */
-public class Main {
+public class Fixtures {
 
-    public static void main(String[] args) {
+    public void createSingleFixtures() {
 
     }
-    
+
+    public void createDoubleFixtures() {
+
+    }
+
+    public void createFixturesPlayed() {
+
+    }
+
+    public void displayFixturesPlayed() {
+
+    }
 }
